@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">FitTrack</string>
+    <string name="jetpack_compose_tutorial">Jetpack Compose tutorial</string>
+    <string name="shorter">Jetpack Compose is a modern toolkit for building native Android UI. Compose simplifies and accelerates UI development on Android with less code, powerful tools, and intuitive Kotlin APIs.</string>
+    <string name="longer">In this tutorial, you build a simple UI component with declarative functions. You call Compose functions to say what elements you want and the Compose compiler does the rest. Compose is built around Composable functions. These functions let you define your app\\\'s UI programmatically because they let you describe how it should look and provide data dependencies, rather than focus on the process of the UI\\\'s construction, such as initializing an element and then attaching it to a parent. To create a Composable function, you add the @Composable annotation to the function name.\n</string>
+    <string name="all_tasks_completed">All tasks completed</string>
+    <string name="nice_work">Nice work!</string>
+    <string name="text_composable">Text composable</string>
+    <string name="displays_text_and_follows_the_recommended_material_design_guidelines">Displays text and follows the recommended Material Design guidelines.</string>
+    <string name="image_composable">Image composable</string>
+    <string name="creates_a">Creates a composable that lays out and draws a given Painter class object.</string>
+    <string name="row_composable">Row composable</string>
+    <string name="a_layout">A layout composable that places its children in a horizontal sequence.</string>
+    <string name="column_composable">Column composable</string>
+    <string name="a_layout___">A layout composable that places its children in a vertical sequence.</string>
+    <string name="marc_badyna">Marc Badyna</string>
+    <string name="android_developer">Android Developer</string>
+    <string name="mbadyna_m_marywood_edu">mbadyna@m.marywood.edu</string>
+    <string name="_917_423_5866">917-423-5866</string>
+    <string name="home">Home</string>
+    <string name="distance">"Distance: "</string>
+    <string name="time">"Time: "</string>
+    <string name="pace">"Pace: "</string>
+    <string name="fittrack">FitTrack</string>
+    <string name="record">Record</string>
+    <string name="calendar">Calendar</string>
+</resources>
