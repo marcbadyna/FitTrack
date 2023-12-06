@@ -37,6 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 val locationUpdates = mutableListOf<Location>()
 
 @Composable
@@ -71,6 +72,10 @@ fun RecordScreen() {
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
+        MapViewComposable(
+            locationState = remember { mutableStateOf(locationState) },
+            modifier = Modifier.padding(top = 65.dp)
+        )
         locationState?.let { location ->
             Text(text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}", modifier = Modifier.align(Alignment.Center))
         } ?: Text(text = "Waiting for location...", modifier = Modifier.align(Alignment.Center))
