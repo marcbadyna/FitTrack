@@ -12,7 +12,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,6 @@ fun CalendarScreen(refreshTrigger: MutableState<Boolean>) {
     val totalDistance = remember { mutableDoubleStateOf(0.0) }
     val totalTime = remember { mutableLongStateOf(0L) }
     val numberOfRuns = remember { mutableIntStateOf(0) }
-    val averagePace = remember { mutableStateOf("0:00 min/mile") }
 
     LaunchedEffect(refreshTrigger.value) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -35,16 +33,11 @@ fun CalendarScreen(refreshTrigger: MutableState<Boolean>) {
             val totalDist = sessions.sumOf { it.distance }
             val totalDur = sessions.sumOf { it.duration }
             val runCount = sessions.size
-            val avgPace = if (runCount > 0) {
-                val totalPaceMinutes = sessions.sumOf { durationToMinutes(it.duration) }
-                calculatePace(totalDist, (totalPaceMinutes / runCount).toLong())
-            } else "N/A"
 
             withContext(Dispatchers.Main) {
                 totalDistance.doubleValue = totalDist
                 totalTime.longValue = totalDur
                 numberOfRuns.intValue = runCount
-                averagePace.value = avgPace
             }
         }
     }
@@ -53,7 +46,6 @@ fun CalendarScreen(refreshTrigger: MutableState<Boolean>) {
         StatisticCard(label = "Total Distance", value = "${String.format("%.2f", totalDistance.doubleValue)} miles")
         StatisticCard(label = "Total Time", value = formatDuration(totalTime.longValue))
         StatisticCard(label = "Number of Runs", value = "${numberOfRuns.intValue}")
-        StatisticCard(label = "Average Pace", value = averagePace.value)
     }
 }
 
@@ -71,10 +63,6 @@ fun StatisticCard(label: String, value: String) {
             Text(text = value, style = MaterialTheme.typography.bodySmall)
         }
     }
-}
-
-fun durationToMinutes(durationInSeconds: Long): Double {
-    return durationInSeconds / 60.0
 }
 
 
