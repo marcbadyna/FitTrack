@@ -76,11 +76,15 @@ fun RecordScreen() {
             locationState = remember { mutableStateOf(locationState) },
             modifier = Modifier.padding(top = 65.dp)
         )
-        locationState?.let { location ->
-            Text(text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}", modifier = Modifier.align(Alignment.Center))
-        } ?: Text(text = "Waiting for location...", modifier = Modifier.align(Alignment.Center))
 
         Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            locationState?.let { location ->
+                Text(text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
+                Spacer(modifier = Modifier.height(8.dp))
+            } ?: Text(text = "Waiting for location...")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Button(onClick = {
                 timerStarted = !timerStarted
                 if (timerStarted) {
