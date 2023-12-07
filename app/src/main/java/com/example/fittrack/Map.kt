@@ -68,7 +68,7 @@ private fun updateMapWithLocation(map: GoogleMap?, location: Location?) {
         val currentLocation = LatLng(it.latitude, it.longitude)
         Log.d("MapViewComposable", "Location updated: Lat: ${it.latitude}, Long: ${it.longitude}")
         map.apply {
-            clear() // Clear existing markers
+            clear()
             addMarker(MarkerOptions().position(currentLocation).title("Your Location"))
             moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }
