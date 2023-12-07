@@ -48,7 +48,6 @@ fun RecordScreen() {
     var sessionId by remember { mutableIntStateOf(0) }
     var timerStarted by remember { mutableStateOf(false) }
     var timeCount by remember { mutableLongStateOf(0L) }
-
     val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
         hasLocationPermission = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true &&
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
@@ -58,7 +57,6 @@ fun RecordScreen() {
             }
         }
     }
-
     LaunchedEffect(key1 = true) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -70,13 +68,11 @@ fun RecordScreen() {
             }
         }
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         MapViewComposable(
             locationState = remember { mutableStateOf(locationState) },
             modifier = Modifier.padding(top = 65.dp)
         )
-
         Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             locationState?.let { location ->
                 Text(text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
@@ -103,7 +99,6 @@ fun RecordScreen() {
                             sessionId = sessionId
                         )
                     })
-
                     val sessionData = collectSessionData(timeCount, totalDistance)
                     CoroutineScope(Dispatchers.IO).launch {
                         MyApp.database?.sessionDao()?.insertSession(sessionData)
@@ -117,7 +112,6 @@ fun RecordScreen() {
             Text(text = "Timer: $timeCount seconds")
         }
     }
-
     LaunchedEffect(key1 = timerStarted) {
         while (timerStarted) {
             delay(1000)

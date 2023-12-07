@@ -1,6 +1,7 @@
 package com.example.fittrack
 
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -37,7 +38,6 @@ fun MapViewComposable(locationState: State<Location?>, modifier: Modifier = Modi
             mapView.onDestroy()
         }
     }
-
     AndroidView(
         { mapView },
         modifier = modifier
@@ -46,26 +46,34 @@ fun MapViewComposable(locationState: State<Location?>, modifier: Modifier = Modi
     ) { mapView ->
         mapView.getMapAsync { map ->
             googleMap = map
-
             map.mapType = GoogleMap.MAP_TYPE_NORMAL
-
-            locationState.value?.let { location ->
-                val currentLocation = LatLng(location.latitude, location.longitude)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
-                map.addMarker(MarkerOptions().position(currentLocation))
-            }
+            updateMapWithLocation(map, locationState.value)
         }
     }
-
     LaunchedEffect(locationState.value) {
-        locationState.value?.let { location ->
-            val currentLocation = LatLng(location.latitude, location.longitude)
-            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
-            googleMap?.addMarker(MarkerOptions().position(currentLocation))
+        if (locationState.value != null) {
+            updateMapWithLocation(googleMap, locationState.value)
+        } else {
+            Log.d("MapViewComposable", "Waiting for location update...")
         }
     }
 }
 
+private fun updateMapWithLocation(map: GoogleMap?, location: Location?) {
+    if (map == null) {
+        Log.d("MapViewComposable", "Google Map instance is null.")
+        return
+    }
+    location?.let {
+        val currentLocation = LatLng(it.latitude, it.longitude)
+        Log.d("MapViewComposable", "Location updated: Lat: ${it.latitude}, Long: ${it.longitude}")
+        map.apply {
+            clear() // Clear existing markers
+            addMarker(MarkerOptions().position(currentLocation).title("Your Location"))
+            moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+        }
+    } ?: Log.d("MapViewComposable", "Location is null.")
+}
 
 
 
