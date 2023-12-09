@@ -1,6 +1,5 @@
 package com.example.fittrack
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,50 +16,15 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.fittrack.data.Tab
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun FitTrackApp(navController: NavController) {
-    var selectedTab by remember { mutableStateOf(Tab.Home) }
-    val refreshTrigger = remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            FitTopAppBar(selectedTab)
-        },
-        bottomBar = {
-            BottomBar(selectedTab) {
-                selectedTab = it
-                when (it) {
-                    Tab.Home -> navController.navigate("home")
-                    Tab.Record -> navController.navigate("record")
-                    Tab.Calendar -> navController.navigate("calendar")
-                }
-            }
-        }
-    ) {
-        when (selectedTab) {
-            Tab.Home -> HomeScreen()
-            Tab.Record -> RecordScreen()
-            Tab.Calendar -> CalendarScreen(refreshTrigger)
-        }
-    }
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +34,7 @@ fun FitTopAppBar(selectedTab: Tab) {
         val title = when (selectedTab) {
             Tab.Home -> stringResource(R.string.home)
             Tab.Record -> stringResource(R.string.record)
-            Tab.Calendar -> stringResource(R.string.calendar)
+            Tab.Stats -> stringResource(R.string.stats)
         }
 
         CenterAlignedTopAppBar(
@@ -140,10 +104,10 @@ fun BottomBar(
                 ) { onTabSelected(Tab.Record) }
 
                 BottomBarButton(
-                    text = stringResource(R.string.calendar),
+                    text = stringResource(R.string.stats),
                     icon = Icons.Default.CalendarToday,
-                    isSelected = selectedTab == Tab.Calendar
-                ) { onTabSelected(Tab.Calendar) }
+                    isSelected = selectedTab == Tab.Stats
+                ) { onTabSelected(Tab.Stats) }
             }
         }
     )

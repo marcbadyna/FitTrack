@@ -14,7 +14,7 @@ data class RunData(
     val pace: String
 )
 
-enum class Tab { Home, Record, Calendar }
+enum class Tab { Home, Record, Stats }
 
 @Entity
 class LocationEntity(

@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun CalendarScreen(refreshTrigger: MutableState<Boolean>) {
+fun StatsScreen(refreshTrigger: MutableState<Boolean>) {
     val totalDistance = remember { mutableDoubleStateOf(0.0) }
     val totalTime = remember { mutableLongStateOf(0L) }
     val numberOfRuns = remember { mutableIntStateOf(0) }

@@ -24,4 +24,5 @@
     <string name="fittrack">FitTrack</string>
     <string name="record">Record</string>
     <string name="calendar">Calendar</string>
+    <string name="stats">Stats</string>
 </resources>

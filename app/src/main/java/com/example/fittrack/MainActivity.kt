@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -39,7 +38,7 @@ class MainActivity : ComponentActivity() {
             selectedTab = when (currentRoute) {
                 "home" -> Tab.Home
                 "record" -> Tab.Record
-                "calendar" -> Tab.Calendar
+                "stats" -> Tab.Stats
                 else -> Tab.Home
             }
         }
@@ -60,7 +59,7 @@ class MainActivity : ComponentActivity() {
                             when (it) {
                                 Tab.Home -> navController.navigate("home")
                                 Tab.Record -> navController.navigate("record")
-                                Tab.Calendar -> navController.navigate("calendar")
+                                Tab.Stats -> navController.navigate("stats")
                             }
                         }
                     }
@@ -78,29 +77,11 @@ class MainActivity : ComponentActivity() {
                     composable("record") {
                         RecordScreen()
                     }
-                    composable("calendar") {
-                        CalendarScreen(refreshTrigger)
+                    composable("stats") {
+                        StatsScreen(refreshTrigger)
                     }
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun PracticePreview() {
-    FitTrackTheme {
-        val navController = rememberNavController()
-        FitTrackApp(navController = navController)
-    }
-}
-
-@Preview
-@Composable
-fun PracticeDarkThemePreview() {
-    FitTrackTheme(darkTheme = true) {
-        val navController = rememberNavController()
-        FitTrackApp(navController = navController)
     }
 }
