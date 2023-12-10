@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import com.example.fittrack.data.RunData
 @Composable
 fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
 
     if (showDialog) {
         AlertDialog(
@@ -35,19 +37,15 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
             title = { Text(text = "Confirm Deletion") },
             text = { Text("Are you sure you want to delete this run?") },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        onDelete(runData)
-                    }
-                ) {
+                TextButton(onClick = {
+                    showDialog = false
+                    onDelete(runData)
+                }) {
                     Text("Yes")
                 }
             },
             dismissButton = {
-                TextButton(
-                    onClick = { showDialog = false }
-                ) {
+                TextButton(onClick = { showDialog = false }) {
                     Text("No")
                 }
             }
@@ -59,31 +57,57 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = runData.date,
                     style = MaterialTheme.typography.labelSmall
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = { showDialog = true }
-                ) {
+                IconButton(onClick = { expanded = true }) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "More options"
                     )
+                }
+                CustomDropdownMenu(expanded, onDismiss = { expanded = false }) {
+                    CustomDropdownMenuItem("Delete") {
+                        showDialog = true
+                        expanded = false
+                    }
+                    CustomDropdownMenuItem("Cancel") {
+                        expanded = false
+                    }
                 }
             }
             RunDetails(runData)
         }
     }
 }
+
+@Composable
+fun CustomDropdownMenu(
+    expanded: Boolean,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    if (expanded) {
+        Column {
+            content()
+        }
+        DisposableEffect(Unit) {
+            onDispose { onDismiss() }
+        }
+    }
+}
+
+@Composable
+fun CustomDropdownMenuItem(text: String, onClick: () -> Unit) {
+    TextButton(onClick = onClick) {
+        Text(text)
+    }
+}
+
 
 @Composable
 fun RunDetails(runData: RunData) {
