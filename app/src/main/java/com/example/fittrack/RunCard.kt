@@ -63,11 +63,11 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Icon(
-                    imageVector = Icons.Default.DirectionsRun, // Example icon
+                    imageVector = Icons.Default.DirectionsRun,
                     contentDescription = "Run",
-                    modifier = Modifier.size(18.dp) // Adjust the size as needed
+                    modifier = Modifier.size(18.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = runData.date,
                     style = MaterialTheme.typography.labelSmall
