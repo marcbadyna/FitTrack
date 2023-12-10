@@ -7,19 +7,53 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.fittrack.data.RunData
 
+
 @Composable
 fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Confirm Deletion") },
+            text = { Text("Are you sure you want to delete this run?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        onDelete(runData)
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text("No")
+                }
+            }
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,7 +71,7 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(
-                    onClick = { onDelete(runData) }
+                    onClick = { showDialog = true }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
