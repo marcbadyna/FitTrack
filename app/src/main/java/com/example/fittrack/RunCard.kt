@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -59,6 +62,12 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
+                Icon(
+                    imageVector = Icons.Default.DirectionsRun, // Example icon
+                    contentDescription = "Run",
+                    modifier = Modifier.size(18.dp) // Adjust the size as needed
+                )
+                Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
                 Text(
                     text = runData.date,
                     style = MaterialTheme.typography.labelSmall

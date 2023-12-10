@@ -34,7 +34,7 @@ val CustomTypography = Typography(
     labelSmall = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Medium,
-        fontSize = 10.sp
+        fontSize = 12.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = Montserrat,
