@@ -46,12 +46,12 @@ fun RunCard(runData: RunData, onDelete: (RunData) -> Unit) {
                     showDialog = false
                     onDelete(runData)
                 }) {
-                    Text("Yes")
+                    Text("Yes", style = MaterialTheme.typography.bodyLarge)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDialog = false }) {
-                    Text("No")
+                    Text("No", style = MaterialTheme.typography.bodyLarge)
                 }
             }
         )
@@ -115,7 +115,7 @@ fun CustomDropdownMenu(
 @Composable
 fun CustomDropdownMenuItem(text: String, onClick: () -> Unit) {
     TextButton(onClick = onClick) {
-        Text(text)
+        Text(text, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
@@ -125,13 +125,13 @@ fun RunDetails(runData: RunData) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = 2.dp)
     ) {
         // Left side for Distance
-        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.Start) {
+        Column(modifier = Modifier.weight(1.2f), horizontalAlignment = Alignment.Start) {
             Text(
                 text = String.format("%.2f", runData.distance),
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.labelLarge
             )
             Text(
                 text = "Miles",
@@ -139,26 +139,29 @@ fun RunDetails(runData: RunData) {
             )
         }
 
+        Spacer(modifier = Modifier.weight(0.1f))
+
         // Middle column for Time and Pace
         Column(modifier = Modifier.weight(1.2f)) {
+            Spacer(modifier = Modifier.height(8.dp)) // Adjust height to align with distance
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.time),
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Spacer(modifier = Modifier.width(30.dp)) // Space between label and value
+                Spacer(modifier = Modifier.width(24.dp)) // Consistent space between label and value
                 Text(
                     text = runData.duration,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp)) // Space between Time and Pace rows
+            Spacer(modifier = Modifier.height(8.dp)) // Space between Time and Pace
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.pace),
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Spacer(modifier = Modifier.width(30.dp)) // Space between label and value
+                Spacer(modifier = Modifier.width(24.dp)) // Consistent space between label and value
                 Text(
                     text = runData.pace,
                     style = MaterialTheme.typography.bodyLarge
@@ -170,6 +173,9 @@ fun RunDetails(runData: RunData) {
         Spacer(modifier = Modifier.weight(1f))
     }
 }
+
+
+
 
 
 
