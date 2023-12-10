@@ -65,7 +65,11 @@ fun formatDuration(durationInSeconds: Long): String {
     val minutes = java.util.concurrent.TimeUnit.SECONDS.toMinutes(durationInSeconds) % 60
     val seconds = durationInSeconds % 60
 
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    return if (hours > 0) {
+        String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    } else {
+        String.format("%02d:%02d", minutes, seconds)
+    }
 }
 
 fun calculatePace(distance: Double, durationInSeconds: Long): String {
@@ -77,7 +81,7 @@ fun calculatePace(distance: Double, durationInSeconds: Long): String {
 
     val paceMinutes = pace.toInt()
     val paceSeconds = ((pace - paceMinutes) * 60).toInt()
-    return String.format("%d:%02d min/mile", paceMinutes, paceSeconds)
+    return String.format("%d:%02d /mi", paceMinutes, paceSeconds)
 }
 
 @Composable

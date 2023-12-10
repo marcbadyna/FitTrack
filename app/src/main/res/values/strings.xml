@@ -16,11 +16,11 @@
     <string name="marc_badyna">Marc Badyna</string>
     <string name="android_developer">Android Developer</string>
     <string name="mbadyna_m_marywood_edu">mbadyna@m.marywood.edu</string>
-    <string name="_917_423_5866">917-423-5866</string>
+    <string name="_917_423_5866">917–423–5866</string>
     <string name="home">Home</string>
     <string name="distance">"Distance: "</string>
-    <string name="time">"Time: "</string>
-    <string name="pace">"Pace: "</string>
+    <string name="time">"Time "</string>
+    <string name="pace">"Pace "</string>
     <string name="fittrack">FitTrack</string>
     <string name="record">Record</string>
     <string name="calendar">Calendar</string>
