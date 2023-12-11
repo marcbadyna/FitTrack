@@ -142,7 +142,7 @@ fun RunDetails(runData: RunData) {
         Spacer(modifier = Modifier.weight(0.1f))
 
         // Middle column for Time and Pace
-        Column(modifier = Modifier.weight(1.2f)) {
+        Column(modifier = Modifier.weight(1.5f)) {
             Spacer(modifier = Modifier.height(8.dp)) // Adjust height to align with distance
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
