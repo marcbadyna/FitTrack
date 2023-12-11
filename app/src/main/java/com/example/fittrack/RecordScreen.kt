@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -57,6 +61,7 @@ fun RecordScreen() {
             }
         }
     }
+
     LaunchedEffect(key1 = true) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -68,11 +73,13 @@ fun RecordScreen() {
             }
         }
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
         MapViewComposable(
             locationState = remember { mutableStateOf(locationState) },
             modifier = Modifier.padding(top = 65.dp)
         )
+
         Column(modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 100.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             locationState?.let { location ->
                 Text(text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}")
@@ -81,37 +88,48 @@ fun RecordScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = {
-                timerStarted = !timerStarted
-                if (timerStarted) {
-                    sessionId = (System.currentTimeMillis() / 1000).toInt()
-                    locationUpdates.clear()
-                    getLocationUpdates(context, sessionId, true) { location ->
-                        locationState = location
-                        locationUpdates.add(location)
+            // Circular Record Button
+            Button(
+                onClick = {
+                    timerStarted = !timerStarted
+                    if (timerStarted) {
+                        sessionId = (System.currentTimeMillis() / 1000).toInt()
+                        locationUpdates.clear()
+                        getLocationUpdates(context, sessionId, true) { location ->
+                            locationState = location
+                            locationUpdates.add(location)
+                        }
+                    } else {
+                        val totalDistance = calculateTotalDistance(locationUpdates.map { location ->
+                            LocationEntity(
+                                latitude = location.latitude,
+                                longitude = location.longitude,
+                                timestamp = location.time,
+                                sessionId = sessionId
+                            )
+                        })
+                        val sessionData = collectSessionData(timeCount, totalDistance)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            MyApp.database?.sessionDao()?.insertSession(sessionData)
+                        }
                     }
-                } else {
-                    val totalDistance = calculateTotalDistance(locationUpdates.map { location ->
-                        LocationEntity(
-                            latitude = location.latitude,
-                            longitude = location.longitude,
-                            timestamp = location.time,
-                            sessionId = sessionId
-                        )
-                    })
-                    val sessionData = collectSessionData(timeCount, totalDistance)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        MyApp.database?.sessionDao()?.insertSession(sessionData)
-                    }
+                },
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape),
+                content = {
+                    Text(
+                        text = if (timerStarted) "Stop" else "Start",
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
-            }) {
-                Text(text = if (timerStarted) "Stop" else "Start")
-            }
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Timer: $timeCount seconds")
         }
     }
+
     LaunchedEffect(key1 = timerStarted) {
         while (timerStarted) {
             delay(1000)

@@ -1,5 +1,6 @@
 package com.example.fittrack
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,35 +28,49 @@ fun HomeScreen() {
 
     val onDelete: (RunData) -> Unit = { runData ->
         coroutineScope.launch(Dispatchers.IO) {
-            MyApp.database?.sessionDao()?.deleteSession(
-                SessionEntity(
-                    id = runData.sessionId,
-                    date = runData.date,
-                    distance = runData.distance,
-                    duration = parseDuration(runData.duration)
+            try {
+                // Deleting the session from the database
+                MyApp.database?.sessionDao()?.deleteSession(
+                    SessionEntity(
+                        id = runData.sessionId,
+                        date = runData.date,
+                        distance = runData.distance,
+                        duration = parseDuration(runData.duration)
+                    )
                 )
-            )
 
-            MyApp.database?.locationDao()?.deleteLocationsBySession(runData.sessionId)
+                // Deleting associated locations
+                MyApp.database?.locationDao()?.deleteLocationsBySession(runData.sessionId)
 
-            cleanupOrphanedLocations()
+                // Cleaning up orphaned locations
+                cleanupOrphanedLocations()
 
-            val updatedRunData = MyApp.database?.sessionDao()?.getAllSessions()?.map { entity ->
-                RunData(
-                    sessionId = entity.id,
-                    date = entity.date,
-                    distance = entity.distance,
-                    duration = formatDuration(entity.duration),
-                    pace = calculatePace(entity.distance, entity.duration)
-                )
-            } ?: listOf()
+                // Fetching the updated list of runs
+                val updatedRunData = MyApp.database?.sessionDao()?.getAllSessions()?.map { entity ->
+                    RunData(
+                        sessionId = entity.id,
+                        date = entity.date,
+                        distance = entity.distance,
+                        duration = formatDuration(entity.duration),
+                        pace = calculatePace(entity.distance, entity.duration)
+                    )
+                } ?: listOf()
 
-            withContext(Dispatchers.Main) {
-                runs.value = updatedRunData
-                refreshTrigger.value = !refreshTrigger.value
+                // Updating the UI on the main thread
+                withContext(Dispatchers.Main) {
+                    runs.value = updatedRunData
+                    refreshTrigger.value = !refreshTrigger.value
+                }
+            } catch (e: Exception) {
+                Log.e("HomeScreen", "Error deleting run: ${e.message}")
+                // Handle the exception (e.g., show a toast, update UI)
+                withContext(Dispatchers.Main) {
+                    // Update your UI here if needed
+                }
             }
         }
     }
+
 
     LazyColumn(
         contentPadding = PaddingValues(

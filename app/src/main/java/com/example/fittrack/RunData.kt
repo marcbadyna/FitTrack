@@ -109,7 +109,12 @@ fun generateRunData(): List<RunData> {
 
 fun parseDuration(duration: String): Long {
     val parts = duration.split(":").map { it.toInt() }
-    return (parts[0] * 3600L) + (parts[1] * 60L) + parts[2]
+    return when (parts.size) {
+        3 -> (parts[0] * 3600L) + (parts[1] * 60L) + parts[2]  // HH:mm:ss
+        2 -> (parts[0] * 60L) + parts[1]                      // mm:ss
+        1 -> parts[0].toLong()                                // ss
+        else -> 0L
+    }
 }
 
 fun cleanupOrphanedLocations() {
