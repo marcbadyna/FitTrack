@@ -22,14 +22,13 @@ import kotlinx.coroutines.withContext
 fun HomeScreen() {
     val runs = remember { mutableStateOf<List<RunData>>(listOf()) }
     val coroutineScope = rememberCoroutineScope()
-    val refreshTrigger = remember { mutableStateOf(false) } // Refresh trigger for CalendarScreen
+    val refreshTrigger = remember { mutableStateOf(false) }
 
     GenerateRunDataEffect(runs)
 
     val onDelete: (RunData) -> Unit = { runData ->
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                // Deleting the session from the database
                 MyApp.database?.sessionDao()?.deleteSession(
                     SessionEntity(
                         id = runData.sessionId,
@@ -39,13 +38,10 @@ fun HomeScreen() {
                     )
                 )
 
-                // Deleting associated locations
                 MyApp.database?.locationDao()?.deleteLocationsBySession(runData.sessionId)
 
-                // Cleaning up orphaned locations
                 cleanupOrphanedLocations()
 
-                // Fetching the updated list of runs
                 val updatedRunData = MyApp.database?.sessionDao()?.getAllSessions()?.map { entity ->
                     RunData(
                         sessionId = entity.id,
@@ -56,16 +52,13 @@ fun HomeScreen() {
                     )
                 } ?: listOf()
 
-                // Updating the UI on the main thread
                 withContext(Dispatchers.Main) {
                     runs.value = updatedRunData
                     refreshTrigger.value = !refreshTrigger.value
                 }
             } catch (e: Exception) {
                 Log.e("HomeScreen", "Error deleting run: ${e.message}")
-                // Handle the exception (e.g., show a toast, update UI)
                 withContext(Dispatchers.Main) {
-                    // Update your UI here if needed
                 }
             }
         }

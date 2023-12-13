@@ -127,7 +127,6 @@ fun RunDetails(runData: RunData) {
             .fillMaxWidth()
             .padding(top = 2.dp)
     ) {
-        // Left side for Distance
         Column(modifier = Modifier.weight(1.2f), horizontalAlignment = Alignment.Start) {
             Text(
                 text = String.format("%.2f", runData.distance),
@@ -141,27 +140,26 @@ fun RunDetails(runData: RunData) {
 
         Spacer(modifier = Modifier.weight(0.1f))
 
-        // Middle column for Time and Pace
         Column(modifier = Modifier.weight(1.5f)) {
-            Spacer(modifier = Modifier.height(8.dp)) // Adjust height to align with distance
+            Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.time),
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Spacer(modifier = Modifier.width(24.dp)) // Consistent space between label and value
+                Spacer(modifier = Modifier.width(24.dp))
                 Text(
                     text = runData.duration,
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp)) // Space between Time and Pace
+            Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.pace),
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Spacer(modifier = Modifier.width(24.dp)) // Consistent space between label and value
+                Spacer(modifier = Modifier.width(24.dp))
                 Text(
                     text = runData.pace,
                     style = MaterialTheme.typography.bodyLarge
@@ -169,7 +167,6 @@ fun RunDetails(runData: RunData) {
             }
         }
 
-        // Right side spacer
         Spacer(modifier = Modifier.weight(1f))
     }
 }

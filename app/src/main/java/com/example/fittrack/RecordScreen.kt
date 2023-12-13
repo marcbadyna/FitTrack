@@ -88,7 +88,6 @@ fun RecordScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Circular Record Button
             Button(
                 onClick = {
                     timerStarted = !timerStarted
